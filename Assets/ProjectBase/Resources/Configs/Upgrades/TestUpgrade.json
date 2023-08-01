@@ -1,0 +1,8 @@
+﻿{
+  "Id": 0,
+  "Type": "Click",
+  "StartLevel": 1,
+  "BaseDamage": 1,
+  "BasePrice": 15,
+  "PriceMultiplier": 1.07
+}
