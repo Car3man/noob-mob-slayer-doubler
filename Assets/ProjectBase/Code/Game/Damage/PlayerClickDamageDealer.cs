@@ -1,4 +1,4 @@
-﻿using Game.Input;
+﻿using Game.PlayerInput;
 using Game.Upgrades;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -11,16 +11,16 @@ namespace Game.Damage
         [SerializeField] private ObjectInputHandler objectInputHandler;
         
         private MobDamageDealer _mobDamageDealer;
-        private UpgradeController _upgradeController;
+        private UpgradeInventory _upgradeInventory;
 
         [Zenject.Inject]
         public void Construct(
             MobDamageDealer mobDamageDealer,
-            UpgradeController upgradeController
+            UpgradeInventory upgradeInventory
             )
         {
             _mobDamageDealer = mobDamageDealer;
-            _upgradeController = upgradeController;
+            _upgradeInventory = upgradeInventory;
         }
 
         private void Start()
@@ -40,7 +40,7 @@ namespace Game.Damage
 
         private void HandleDamageClick(PointerEventData eventData)
         {
-            var clickDamage = _upgradeController.GetDamageByUpgradeType(UpgradeType.Click);
+            var clickDamage = _upgradeInventory.GetDamageByUpgradeType(UpgradeType.Click);
             _mobDamageDealer.DealDamage(clickDamage);
         }
     }

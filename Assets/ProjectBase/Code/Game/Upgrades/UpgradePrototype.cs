@@ -7,18 +7,28 @@ namespace Game.Upgrades
         public readonly int Id;
         public readonly UpgradeType Type;
         public readonly int StartLevel;
-        public readonly BigInteger BaseDamage;
-        public readonly BigInteger BasePrice;
-        public readonly float PriceMultiplier;
+        public readonly BigInteger BaseBaseDamage;
+        public readonly BigInteger BaseBasePrice;
+        public readonly float BasePriceMultiplier;
+        public readonly int MaxLevel;
 
-        public UpgradePrototype(int id, UpgradeType type, int startLevel, BigInteger baseDamage, BigInteger basePrice, float priceMultiplier)
+        public UpgradePrototype(
+            int id,
+            UpgradeType type,
+            int startLevel,
+            BigInteger baseBaseDamage,
+            BigInteger baseBasePrice,
+            float basePriceMultiplier,
+            int maxLevel
+            )
         {
             Id = id;
             Type = type;
             StartLevel = startLevel;
-            BaseDamage = baseDamage;
-            BasePrice = basePrice;
-            PriceMultiplier = priceMultiplier;
+            BaseBaseDamage = baseBaseDamage;
+            BaseBasePrice = baseBasePrice;
+            BasePriceMultiplier = basePriceMultiplier;
+            MaxLevel = maxLevel;
         }
     }
 }

@@ -1,0 +1,11 @@
+Id,Number,MobsIds,CountMobsToComplete,MobsHealth,MobsCoinsReward,IsTimeLimit,TimeLimit,ParentId
+Flatland1,1,Chicken,10,10,4,,,
+Flatland2,2,,,45,4,,,Flatland1
+Flatland3,3,,,63,4,,,Flatland1
+Flatland4,4,,,80,6,,,Flatland1
+Flatland5,5,,,95,6,,,Flatland1
+Flatland6,6,,,109,6,,,Flatland1
+Flatland7,7,,,123,9,,,Flatland1
+Flatland8,8,,,136,9,,,Flatland1
+Flatland9,9,,,149,9,,,Flatland1
+Flatland10,10,Chicken,1,2000,100,true,30,

@@ -13,10 +13,10 @@ namespace Game.Configs.JsonImpl
 {
     public class JsonConfigProvider : IConfigProvider
     {
-        private readonly Dictionary<int, MobJsonObject> _mobJsonObjects = new();
-        private readonly Dictionary<int, MobPrototype> _mobPrototypes = new();
-        private readonly Dictionary<int, IslandJsonObject> _islandJsonObjects = new();
-        private readonly Dictionary<int, IslandPrototype> _islandPrototypes = new();
+        private readonly Dictionary<string, MobJsonObject> _mobJsonObjects = new();
+        private readonly Dictionary<string, MobPrototype> _mobPrototypes = new();
+        private readonly Dictionary<string, IslandJsonObject> _islandJsonObjects = new();
+        private readonly Dictionary<string, IslandPrototype> _islandPrototypes = new();
         private readonly Dictionary<int, UpgradeJsonObject> _upgradeJsonObjects = new();
         private readonly Dictionary<int, UpgradePrototype> _upgradePrototypes = new();
         private bool _configsLoaded;
@@ -24,10 +24,6 @@ namespace Game.Configs.JsonImpl
         private const string MobsConfigsPath = "Configs/Mobs/";
         private const string IslandsConfigsPath = "Configs/Islands/";
         private const string UpgradesConfigsPath = "Configs/Upgrades/";
-        
-        public JsonConfigProvider()
-        {
-        }
 
         public async Task LoadAllAsync()
         {
@@ -57,7 +53,9 @@ namespace Game.Configs.JsonImpl
                 var mobJsonObject = _mobJsonObjects[mobId];
                 var mobPrototype = new MobPrototype(
                     mobJsonObject.Id,
-                    mobJsonObject.BaseHealth
+                    mobJsonObject.ResId,
+                    mobJsonObject.HealthMultiplier,
+                    mobJsonObject.CoinsRewardMultiplier
                 );
                 _mobPrototypes.Add(mobId, mobPrototype);
             }
@@ -65,13 +63,13 @@ namespace Game.Configs.JsonImpl
             foreach (var mobId in _mobPrototypes.Keys)
             {
                 var parentMobId = _mobJsonObjects[mobId].ParentId;
-                if (!parentMobId.HasValue)
+                if (parentMobId == null)
                 {
                     continue;
                 }
                 
                 var mobPrototype = _mobPrototypes[mobId];
-                var parentMobPrototype = _mobPrototypes[parentMobId.Value];
+                var parentMobPrototype = _mobPrototypes[parentMobId];
                 mobPrototype.SetParent(parentMobPrototype);
             }
         }
@@ -91,7 +89,14 @@ namespace Game.Configs.JsonImpl
                 var islandJsonObject = _islandJsonObjects[islandId];
                 var islandPrototype = new IslandPrototype(
                     islandJsonObject.Id,
-                    islandJsonObject.MobsIds?.Select(mobId => _mobPrototypes[mobId]).ToArray()
+                    islandJsonObject.Number,
+                    islandJsonObject.ResId,
+                    islandJsonObject.MobsIds?.Select(mobId => _mobPrototypes[mobId]).ToArray(),
+                    islandJsonObject.CountMobsToComplete,
+                    islandJsonObject.MobsHealth,
+                    islandJsonObject.MobsCoinsReward,
+                    islandJsonObject.IsTimeLimit,
+                    islandJsonObject.TimeLimit
                 );
                 _islandPrototypes.Add(islandId, islandPrototype);
             }
@@ -99,13 +104,13 @@ namespace Game.Configs.JsonImpl
             foreach (var islandId in _islandPrototypes.Keys)
             {
                 var parentIslandId = _islandJsonObjects[islandId].ParentId;
-                if (!parentIslandId.HasValue)
+                if (parentIslandId == null)
                 {
                     continue;
                 }
                 
                 var islandPrototype = _islandPrototypes[islandId];
-                var parentIslandPrototype = _islandPrototypes[parentIslandId.Value];
+                var parentIslandPrototype = _islandPrototypes[parentIslandId];
                 islandPrototype.SetParent(parentIslandPrototype);
             }
         }
@@ -129,7 +134,8 @@ namespace Game.Configs.JsonImpl
                     upgradeJsonObject.StartLevel,
                     upgradeJsonObject.BaseDamage,
                     upgradeJsonObject.BasePrice,
-                    upgradeJsonObject.PriceMultiplier
+                    upgradeJsonObject.PriceMultiplier,
+                    upgradeJsonObject.MaxLevel
                 );
                 _upgradePrototypes.Add(upgradeId, upgradePrototype);
             }
@@ -142,7 +148,7 @@ namespace Game.Configs.JsonImpl
             return _mobPrototypes.Select(x => x.Value).AsEnumerable();
         }
 
-        public MobPrototype GetMobById(int id)
+        public MobPrototype GetMobById(string id)
         {
             ThrowIfConfigsNotLoaded();
 
@@ -153,14 +159,24 @@ namespace Game.Configs.JsonImpl
         {
             ThrowIfConfigsNotLoaded();
             
-            return _islandPrototypes.Select(x => x.Value).AsEnumerable();
+            return _islandPrototypes
+                .Select(x => x.Value)
+                .OrderBy(x => x.Number)
+                .AsEnumerable();
         }
 
-        public IslandPrototype GetIslandById(int id)
+        public IslandPrototype GetIslandById(string id)
         {
             ThrowIfConfigsNotLoaded();
 
             return _islandPrototypes[id];
+        }
+
+        public IslandPrototype GetIslandByNumber(int number)
+        {
+            ThrowIfConfigsNotLoaded();
+
+            return GetIslands().First(island => island.Number == number);
         }
 
         public IEnumerable<UpgradePrototype> GetUpgrades()

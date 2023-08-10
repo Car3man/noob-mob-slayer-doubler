@@ -4,6 +4,7 @@ using Game.Islands;
 using Game.Mobs;
 using Game.Upgrades;
 using Ui;
+using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
 
@@ -13,27 +14,54 @@ namespace Infrastructure.SceneInstallers
     {
         public override void InstallBindings()
         {
+            BindGameSceneCamera();
+            
             BindMobFactory();
             BindMobSpawner();
-            BindMobDeathController();
+            BindMobDeathSpawner();
             
             BindIslandFactory();
             BindIslandSpawner();
+            BindIslandChanger();
+            BindIslandCompletionSystem();
+            BindIslandLimitTimer();
 
             BindMobDamageDealer();
             BindPlayerClickDamageHandler();
+            BindPlayerIdleDamageDealer();
 
             BindCurrencyController();
+            BindCoinPool();
+            BindCoinSpawner();
+            BindCoinHarvester();
+            
             BindUpgradeController();
 
             BindGameSceneUiStarter();
+        }
+
+        private void BindGameSceneCamera()
+        {
+            var gameSceneCamera = FindObjectOfType<Camera>();
+            Assert.IsNotNull(gameSceneCamera);
+            
+            Container
+                .Bind<Camera>()
+                .FromInstance(gameSceneCamera)
+                .AsSingle();
         }
 
         private void BindMobFactory()
         {
             Container
                 .BindFactory<MobPrototype, Mob, MobFactory>()
-                .FromComponentInNewPrefabResource("Prefabs/Mob");
+                .FromMethod(CreateMob);
+            
+            Mob CreateMob(DiContainer container, MobPrototype mobPrototype)
+            {
+                return container.InstantiatePrefabResourceForComponent<Mob>(
+                    $"Prefabs/Mobs/{mobPrototype.ResId}", new object[] { mobPrototype });
+            }
         }
 
         private void BindMobSpawner()
@@ -44,10 +72,10 @@ namespace Infrastructure.SceneInstallers
                 .AsSingle();
         }
 
-        private void BindMobDeathController()
+        private void BindMobDeathSpawner()
         {
             Container
-                .Bind<MobDeathController>()
+                .Bind<MobDeathHandler>()
                 .FromNew()
                 .AsSingle();
         }
@@ -56,7 +84,13 @@ namespace Infrastructure.SceneInstallers
         {
             Container
                 .BindFactory<IslandPrototype, Island, IslandFactory>()
-                .FromComponentInNewPrefabResource("Prefabs/Island");
+                .FromMethod(CreateIsland);
+
+            Island CreateIsland(DiContainer container, IslandPrototype islandPrototype)
+            {
+                return container.InstantiatePrefabResourceForComponent<Island>(
+                    $"Prefabs/Islands/{islandPrototype.ResId}", new object[] { islandPrototype });
+            }
         }
 
         private void BindIslandSpawner()
@@ -65,6 +99,31 @@ namespace Infrastructure.SceneInstallers
                 .Bind<IslandSpawner>()
                 .FromNew()
                 .AsSingle();
+        }
+
+        private void BindIslandChanger()
+        {
+            Container
+                .Bind<IslandChanger>()
+                .FromNew()
+                .AsSingle();
+        }
+
+        private void BindIslandCompletionSystem()
+        {
+            Container
+                .Bind<IslandCompletionSystem>()
+                .FromNew()
+                .AsSingle();
+        }
+
+        private void BindIslandLimitTimer()
+        {
+            Container
+                .Bind<IslandLimitTimer>()
+                .FromNew()
+                .AsSingle()
+                .NonLazy();
         }
 
         private void BindMobDamageDealer()
@@ -86,6 +145,14 @@ namespace Infrastructure.SceneInstallers
                 .AsSingle();
         }
 
+        private void BindPlayerIdleDamageDealer()
+        {
+            Container
+                .Bind(typeof(PlayerIdleDamageDealer), typeof(ITickable))
+                .To<PlayerIdleDamageDealer>()
+                .AsSingle();
+        }
+
         private void BindCurrencyController()
         {
             Container
@@ -94,10 +161,34 @@ namespace Infrastructure.SceneInstallers
                 .AsSingle();
         }
 
+        private void BindCoinPool()
+        {
+            Container
+                .BindMemoryPool<Coin, CoinPool>()
+                .FromComponentInNewPrefabResource("Prefabs/Coin");
+        }
+
+        private void BindCoinSpawner()
+        {
+            Container
+                .Bind<CoinSpawner>()
+                .To<CoinSpawner>()
+                .AsSingle()
+                .NonLazy();
+        }
+
+        private void BindCoinHarvester()
+        {
+            Container
+                .Bind(typeof(CoinHarvester), typeof(ITickable), typeof(IFixedTickable))
+                .To<CoinHarvester>()
+                .AsSingle();
+        }
+
         private void BindUpgradeController()
         {
             Container
-                .Bind<UpgradeController>()
+                .Bind<UpgradeInventory>()
                 .FromNew()
                 .AsSingle();
         }

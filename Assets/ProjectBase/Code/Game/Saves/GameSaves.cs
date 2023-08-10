@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using Game.Configs;
 using Services;
 
 namespace Game.Saves
@@ -9,15 +10,21 @@ namespace Game.Saves
     public class GameSaves
     {
         private readonly ISavingManager _savingManager;
+        private readonly IConfigProvider _configProvider;
         private readonly Dictionary<string, object> _cachedVariables = new();
         
         private const string CoinsKey = "coins";
         private const string UpgradeLevelKey = "upgrade_level_{0}";
         private const string SelectedIslandIdKey = "selected_island_id";
+        private const string IslandKilledMobsKey = "island_{0}_killed_mobs";
 
-        public GameSaves(ISavingManager savingManager)
+        public GameSaves(
+            ISavingManager savingManager,
+            IConfigProvider configProvider
+            )
         {
             _savingManager = savingManager;
+            _configProvider = configProvider;
         }
 
         public async Task LoadAllAsync()
@@ -25,6 +32,14 @@ namespace Game.Saves
             await _savingManager.LoadAllAsync();
             await LoadCoins();
             await LoadSelectedIslandId();
+            foreach (var upgradePrototype in _configProvider.GetUpgrades())
+            {
+                await LoadUpgradeLevel(upgradePrototype.Id);
+            }
+            foreach (var islandPrototype in _configProvider.GetIslands())
+            {
+                await LoadIslandKilledMobs(islandPrototype.Number);
+            }
         }
         
         public BigInteger GetCoins(BigInteger defaultValue) => 
@@ -49,6 +64,15 @@ namespace Game.Saves
             await SaveVariable<int>(FormatUpgradeLevelKey(upgradeId), upgradeLevel, immediatelySave);
         private string FormatUpgradeLevelKey(int upgradeId) =>
             string.Format(UpgradeLevelKey, upgradeId);
+        
+        public int GetIslandKilledMobs(int islandNumber, int defaultValue) =>
+            GetVariable(FormatIslandKilledMobsKey(islandNumber), defaultValue);
+        private async Task LoadIslandKilledMobs(int islandNumber) =>
+            await LoadVariable<int>(FormatIslandKilledMobsKey(islandNumber));
+        public async void SaveIslandKilledMobs(int islandNumber, int islandKilledMobs, bool immediatelySave = true) =>
+            await SaveVariable<int>(FormatIslandKilledMobsKey(islandNumber), islandKilledMobs, immediatelySave);
+        private string FormatIslandKilledMobsKey(int islandNumber) =>
+            string.Format(IslandKilledMobsKey, islandNumber);
 
         private T GetVariable<T>(string key, T defaultValue)
         {

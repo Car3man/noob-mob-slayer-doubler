@@ -1,5 +1,4 @@
 ﻿using Game.Configs;
-using Game.Saves;
 using UnityEngine;
 
 namespace Game.Islands
@@ -8,51 +7,32 @@ namespace Game.Islands
     {
         private readonly IConfigProvider _configProvider;
         private readonly IslandFactory _islandFactory;
-        private readonly GameSaves _gameSaves;
         
         public Island CurrentIsland { get; private set; }
+        
+        public delegate void IslandSpawnDelegate(Island island);
+        public event IslandSpawnDelegate OnIslandSpawn;
 
         public IslandSpawner(
             IConfigProvider configProvider,
-            IslandFactory islandFactory,
-            GameSaves gameSaves
+            IslandFactory islandFactory
             )
         {
             _configProvider = configProvider;
             _islandFactory = islandFactory;
-            _gameSaves = gameSaves;
-        }
-        
-        public void RestoreFromSave()
-        {
-            var lastSavedIsland = _gameSaves.GetSelectedIslandId(0);
-            ChangeIsland(lastSavedIsland);
-        }
-        
-        private void ChangeAndSaveIsland(int islandId)
-        {
-            ChangeIsland(islandId);
-            _gameSaves.SaveSelectedIslandId(islandId);
-        }
-        
-        private void ChangeIsland(int islandId)
-        {
-            if (CurrentIsland != null)
-            {
-                DespawnIsland(CurrentIsland);
-            }
-            SpawnIsland(islandId);
         }
 
-        private void SpawnIsland(int id)
+        public void SpawnIsland(int number)
         {
-            var prototype = _configProvider.GetIslandById(id);
+            var prototype = _configProvider.GetIslandByNumber(number);
             CurrentIsland = _islandFactory.Create(prototype);
+            OnIslandSpawn?.Invoke(CurrentIsland);
         }
 
-        private void DespawnIsland(Island island)
+        public void DespawnIsland()
         {
-            Object.Destroy(island.gameObject);
+            Object.Destroy(CurrentIsland.gameObject);
+            CurrentIsland = null;
         } 
     }
 }

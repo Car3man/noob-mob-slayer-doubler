@@ -78,3 +78,13 @@ crashlytics-build.properties
 !/FirebaseProject/public/index.html
 
 /[Pp]romo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+Economic/Scripts/DataExtractor/node_modules/

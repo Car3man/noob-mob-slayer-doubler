@@ -41,7 +41,7 @@ namespace Ui.Panels
 
         private void UpdateUpgradeInfo()
         {
-            titleText.text = $"Upgrade - {Upgrade.Id}";
+            titleText.text = $"Upgrade - {Upgrade.Prototype.Id}";
             levelText.text = $"Lvl.{Upgrade.Level}";
             damageText.text = Upgrade.GetDamage().ToString();
             upgradeButton.SetUpgradeInfo(Upgrade, 1);

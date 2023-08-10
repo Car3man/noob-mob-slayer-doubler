@@ -1,0 +1,9 @@
+﻿{
+  "Id": 9,
+  "Type": "Idle",
+  "StartLevel": 0,
+  "MaxLevel": 100,
+  "BaseDamage": 19683,
+  "BasePrice": 48828125,
+  "PriceMultiplier": 1.07
+}

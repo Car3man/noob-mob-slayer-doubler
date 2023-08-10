@@ -1,0 +1,6 @@
+﻿{
+  "Id": "LegendaryCreeper",
+  "ResId": "Creeper",
+  "HealthMultiplier": 1,
+  "CoinsRewardMultiplier": 1
+}

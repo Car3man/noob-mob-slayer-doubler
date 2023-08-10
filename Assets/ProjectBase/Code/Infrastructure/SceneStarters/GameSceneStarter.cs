@@ -9,23 +9,23 @@ namespace Infrastructure.SceneStarters
     public class GameSceneStarter : BaseSceneStarter
     {
         private CurrencyController _currencyManager;
-        private UpgradeController _upgradeController;
-        private IslandSpawner _islandSpawner;
+        private UpgradeInventory _upgradeInventory;
+        private IslandChanger _islandChanger;
         private MobSpawner _mobSpawner;
         private GameSceneUiStarter _gameSceneUiStarter;
 
         [Zenject.Inject]
         public void Construct(
             CurrencyController currencyController,
-            UpgradeController upgradeController,
-            IslandSpawner islandSpawner,
+            UpgradeInventory upgradeInventory,
+            IslandChanger islandChanger,
             MobSpawner mobSpawner,
             GameSceneUiStarter gameSceneUiStarter
             )
         {
-            _upgradeController = upgradeController;
+            _upgradeInventory = upgradeInventory;
             _currencyManager = currencyController;
-            _islandSpawner = islandSpawner;
+            _islandChanger = islandChanger;
             _mobSpawner = mobSpawner;
             _gameSceneUiStarter = gameSceneUiStarter;
         }
@@ -33,9 +33,9 @@ namespace Infrastructure.SceneStarters
         protected override void OnStart()
         {
             _currencyManager.RestoreFromSave();
-            _upgradeController.PrepareUpgrades();
-            _upgradeController.RestoreFromSave();
-            _islandSpawner.RestoreFromSave();
+            _upgradeInventory.PrepareUpgrades();
+            _upgradeInventory.RestoreFromSave();
+            _islandChanger.RestoreFromSave();
             _mobSpawner.SpawnNext();
             _gameSceneUiStarter.OnGameStart();
         }

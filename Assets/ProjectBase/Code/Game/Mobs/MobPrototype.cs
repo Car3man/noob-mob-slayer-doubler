@@ -1,34 +1,51 @@
-﻿using System.Numerics;
-using Utility;
+﻿using Utility;
 
 namespace Game.Mobs
 {
     public class MobPrototype
     {
-        public readonly int Id;
-        public readonly BigInteger? BaseHealth;
+        public readonly string Id;
+        public readonly string BaseResId;
+        public readonly float? BaseHealthMultiplier;
+        public readonly float? BaseCoinsCoinsRewardMultiplier;
 
         public MobPrototype Parent { get; private set; }
+        
+        public string ResId =>
+            PrototypeExtensions.GetPropertyRecursive(this,prototype => prototype.Parent,
+                prototype => prototype.BaseResId,property => property);
 
-        public BigInteger Health =>
+        public float HealthMultiplier =>
             PrototypeExtensions.GetPropertyRecursive(this,
                 prototype => prototype.Parent,
-                prototype => prototype.BaseHealth,
+                prototype => prototype.BaseHealthMultiplier,
+                property => property.GetValueOrDefault());
+        
+        public float CoinsCoinsRewardMultiplier =>
+            PrototypeExtensions.GetPropertyRecursive(this,
+                prototype => prototype.Parent,
+                prototype => prototype.BaseCoinsCoinsRewardMultiplier,
                 property => property.GetValueOrDefault());
 
         public MobPrototype()
         {
-            Id = 0;
-            BaseHealth = 0;
+            Id = string.Empty;
+            BaseResId = string.Empty;
+            BaseHealthMultiplier = 0f;
+            BaseCoinsCoinsRewardMultiplier = 0f;
         }
 
         public MobPrototype(
-            int id,
-            BigInteger? baseHealth
+            string id,
+            string baseResId,
+            float? baseHealthMultiplier,
+            float? baseCoinsRewardMultiplier
             )
         {
             Id = id;
-            BaseHealth = baseHealth;
+            BaseResId = baseResId;
+            BaseHealthMultiplier = baseHealthMultiplier;
+            BaseCoinsCoinsRewardMultiplier = baseCoinsRewardMultiplier;
         }
 
         public void SetParent(MobPrototype parent)

@@ -9,17 +9,18 @@ namespace Ui.Elements
     public class MobInfoUi : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private ProgressBar healthBar;
         
         private MobSpawner _mobSpawner;
 
         [Zenject.Inject]
-        public void Construct(MobSpawner mobSpawner, MobDeathController mobDeathController)
+        public void Construct(MobSpawner mobSpawner, MobDeathHandler mobDeathHandler)
         {
             _mobSpawner = mobSpawner;
             _mobSpawner.OnMobSpawn += OnMobSpawn;
             _mobSpawner.OnMobDespawn += OnMobDespawn;
-            mobDeathController.OnMobDeath += OnMobDeath;
+            mobDeathHandler.OnMobDeath += OnMobDeath;
         }
 
         public void OnGameStart()
@@ -30,15 +31,15 @@ namespace Ui.Elements
         {
             mob.OnHealthChange += OnMobHealthChange;
 
-            nameText.text = $"Mob {mob.Id}";
-            
+            nameText.text = $"{mob.Prototype.Id}";
+            healthText.text = FormatMobHealth(mob);
             healthBar.SetActive(true);
             UpdateMobHealthBar(mob);
         }
 
         private void OnMobDeath(Mob mob)
         {
-            nameText.text = "Mob dead";
+            nameText.text = "Dead";
         }
 
         private void OnMobDespawn(Mob mob)
@@ -55,7 +56,13 @@ namespace Ui.Elements
         
         private void UpdateMobHealthBar(Mob mob)
         {
+            healthText.text = FormatMobHealth(mob);
             healthBar.SetValue(BigIntegerX.RationalDivision(mob.Health, mob.MaxHealth));
+        }
+
+        private string FormatMobHealth(Mob mob)
+        {
+            return $"{mob.Health} HP";
         }
     }
 }

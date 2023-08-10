@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game.Upgrades;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,22 +14,22 @@ namespace Ui.Panels
         [SerializeField] private UpgradeItem upgradeItemTemplate;
         [SerializeField] private Transform upgradeItemsParent;
         
-        private UpgradeController _upgradeController;
+        private UpgradeInventory _upgradeInventory;
         private readonly Dictionary<int, UpgradeItem> _upgradeItems = new();
 
         public bool IsOpened { get; private set; }
 
         [Zenject.Inject]
-        public void Construct(UpgradeController upgradeController)
+        public void Construct(UpgradeInventory upgradeInventory)
         {
-            _upgradeController = upgradeController;
+            _upgradeInventory = upgradeInventory;
         }
 
         public void OnGameStart()
         {
             upgradeItemTemplate.gameObject.SetActive(false);
             
-            _upgradeController.OnBuyUpgrade += OnBuyUpgrade;
+            _upgradeInventory.OnBuyUpgrade += OnBuyUpgrade;
             
             toggleOpenedButton.onClick.AddListener(ToggleShowState);
             toggleClosedButton.onClick.AddListener(ToggleShowState);
@@ -39,7 +40,7 @@ namespace Ui.Panels
 
         private void OnDestroy()
         {
-            _upgradeController.OnBuyUpgrade -= OnBuyUpgrade;
+            _upgradeInventory.OnBuyUpgrade -= OnBuyUpgrade;
             toggleOpenedButton.onClick.RemoveListener(ToggleShowState);
             toggleClosedButton.onClick.RemoveListener(ToggleShowState);
         }
@@ -52,25 +53,36 @@ namespace Ui.Panels
 
         private void CreateUpgradeItems()
         {
-            foreach (var upgrade in _upgradeController.GetUpgrades())
+            foreach (var upgrade in _upgradeInventory.GetUpgrades().OrderBy(upgrade => upgrade.Prototype.Id))
             {
                 var upgradeItem = CreateUpgradeItem();
                 upgradeItem.OnUpgradeButtonClick += OnUpgradeButtonClick;
                 upgradeItem.SetUpgrade(upgrade);
-                _upgradeItems.Add(upgrade.Id, upgradeItem);
+                _upgradeItems.Add(upgrade.Prototype.Id, upgradeItem);
             }
+            
+            UpdateUpgradeItemsActiveState();
         }
 
         private UpgradeItem CreateUpgradeItem()
         {
             var upgradeItem = Instantiate(upgradeItemTemplate, upgradeItemsParent);
-            upgradeItem.gameObject.SetActive(true);
             return upgradeItem;
+        }
+
+        private void UpdateUpgradeItemsActiveState()
+        {
+            foreach (var upgradeItem in _upgradeItems.Values)
+            {
+                var isAvailableToBuy = _upgradeInventory.IsUpgradeAvailableToBuy(upgradeItem.Upgrade.Prototype.Id);
+                upgradeItem.gameObject.SetActive(isAvailableToBuy);
+            }
         }
 
         private void OnUpgradeButtonClick(Upgrade upgrade)
         {
-            _upgradeController.BuyUpgrade(upgrade.Id);
+            _upgradeInventory.BuyUpgrade(upgrade.Prototype.Id);
+            UpdateUpgradeItemsActiveState();
         }
 
         private void OnBuyUpgrade(int upgradeId)

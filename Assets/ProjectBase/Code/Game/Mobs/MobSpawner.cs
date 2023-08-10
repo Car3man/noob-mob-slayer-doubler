@@ -1,4 +1,5 @@
-﻿using Game.Configs;
+﻿using System.Numerics;
+using Game.Configs;
 using Game.Islands;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -33,38 +34,42 @@ namespace Game.Mobs
         public void SpawnNext()
         {
             var currentIsland = _islandSpawner.CurrentIsland;
-            var availableToSpawnMobs = currentIsland.Mobs;
+            var availableToSpawnMobs = currentIsland.Prototype.Mobs;
             var randomMob = availableToSpawnMobs[Random.Range(0, availableToSpawnMobs.Length)];
             ChangeMob(randomMob.Id);
         }
         
-        private void ChangeMob(int mobId)
+        private void ChangeMob(string mobId)
         {
             if (CurrentMob != null)
             {
-                DespawnMob(CurrentMob);
+                DespawnMob();
             }
             SpawnMob(mobId);
         }
 
-        private void SpawnMob(int id)
+        private void SpawnMob(string id)
         {
-            Assert.IsNotNull(_islandSpawner.CurrentIsland, "Can't spawn mob without island");
-            
-            var spawnPoint = _islandSpawner.CurrentIsland.MobSpawnPoint;
+            var currentIsland = _islandSpawner.CurrentIsland;
+            Assert.IsNotNull(currentIsland, "Can't spawn mob without island");
+
+            var baseMobHealth = currentIsland.Prototype.MobsHealth;
+            var spawnPoint = currentIsland.MobSpawnPoint;
             
             var mobPrototype = _configProvider.GetMobById(id);
             var mobInstance = _mobFactory.Create(mobPrototype);
-            mobInstance.SetHealth(mobInstance.MaxHealth);
+            var mobHealth = baseMobHealth * (BigInteger)(mobPrototype.HealthMultiplier * 100f) / 100;
+            mobInstance.SetMaxHealth(mobHealth);
             mobInstance.transform.position = spawnPoint.transform.position;
 
             CurrentMob = mobInstance;
             OnMobSpawn?.Invoke(CurrentMob);
         }
         
-        private void DespawnMob(Mob mob)
+        private void DespawnMob()
         {
-            Object.Destroy(mob.gameObject);
+            Object.Destroy(CurrentMob.gameObject);
+            CurrentMob = null;
         } 
     }
 }

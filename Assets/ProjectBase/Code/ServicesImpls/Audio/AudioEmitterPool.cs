@@ -4,9 +4,9 @@ namespace ServicesImpls.Audio
 {
     public class AudioEmitterPool : MonoMemoryPool<AudioEmitter>
     {
-        protected override void Reinitialize(AudioEmitter emitter)
+        protected override void Reinitialize(AudioEmitter coinItem)
         {
-            emitter.ResetEmitter();
+            coinItem.ResetEmitter();
         }
     }
 }

@@ -10,9 +10,10 @@ namespace Game.Configs
     {
         Task LoadAllAsync();
         IEnumerable<MobPrototype> GetMobs();
-        MobPrototype GetMobById(int id);
+        MobPrototype GetMobById(string id);
         IEnumerable<IslandPrototype> GetIslands();
-        IslandPrototype GetIslandById(int id);
+        IslandPrototype GetIslandById(string id);
+        IslandPrototype GetIslandByNumber(int number);
         IEnumerable<UpgradePrototype> GetUpgrades();
         UpgradePrototype GetUpgradeById(int id);
     }

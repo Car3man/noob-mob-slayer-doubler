@@ -13,5 +13,6 @@ namespace Game.Configs.JsonImpl
         [JsonConverter(typeof(BigIntegerConverter))]
         public BigInteger BasePrice;
         public float PriceMultiplier;
+        public int MaxLevel;
     }
 }

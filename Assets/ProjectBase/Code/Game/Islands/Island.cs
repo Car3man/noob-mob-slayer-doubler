@@ -1,5 +1,4 @@
-﻿using Game.Mobs;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Islands
 {
@@ -9,8 +8,7 @@ namespace Game.Islands
         
         private IslandPrototype _prototype;
 
-        public int Id => _prototype.Id;
-        public MobPrototype[] Mobs => _prototype.Mobs;
+        public IslandPrototype Prototype => _prototype;
         public GameObject MobSpawnPoint => mobSpawnPoint;
 
         [Zenject.Inject]
