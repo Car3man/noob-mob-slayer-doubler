@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Game.Mobs
@@ -40,10 +41,21 @@ namespace Game.Mobs
         
         private async UniTask MobDeathAnimation()
         {
+            const float rotateDuration = 0.3f;
+            const float delayDuration = 0.2f;
+            
             var mob = _mobSpawner.CurrentMob;
             var mobTrans = mob.transform;
-            mobTrans.RotateAround(mobTrans.position, Vector3.forward, 90f);
-            await UniTask.WaitForSeconds(0.5f);
+            var timeDown = rotateDuration;
+            while (timeDown > 0f)
+            {
+                mobTrans.eulerAngles = Vector3.zero;
+                var angle = (1f - timeDown / rotateDuration) * 90f;
+                mobTrans.RotateAround(mobTrans.position, Vector3.right, angle);
+                await UniTask.WaitForEndOfFrame(mob);
+                timeDown -= Time.deltaTime;
+            }
+            await UniTask.WaitForSeconds(delayDuration);
         }
     }
 }

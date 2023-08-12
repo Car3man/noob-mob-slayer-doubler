@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8978396155204328284}
   - component: {fileID: 342257224650290589}
+  - component: {fileID: -305441285500281760}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -118,6 +119,7 @@ Transform:
   - {fileID: 8756170174312564958}
   - {fileID: 1457135600236411551}
   - {fileID: 3668971911507600938}
+  - {fileID: 6041622329888719475}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &342257224650290589
@@ -132,6 +134,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce099c78e8314a3e86643764ca76985f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mobHitEffect: {fileID: -305441285500281760}
+--- !u!114 &-305441285500281760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2536600849525546419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23567a851cdd40aba535721ceaf7c000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 7748186655822978208}
+  - {fileID: 4471758509800790308}
+  - {fileID: 1777082908431117169}
+  - {fileID: 7039922180672277482}
+  - {fileID: 1281140879888193853}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hitColor: {r: 0.9, g: 0.17999998, b: 0.17999998, a: 1}
 --- !u!1 &6263118827176196867
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,3 +487,65 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &5890684105029059354
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8978396155204328284}
+    m_Modifications:
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3260935680301919944, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+      propertyPath: m_Name
+      value: MobShadowBig
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+--- !u!4 &6041622329888719475 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 173334178960097641, guid: 5ac113eedb35dd143a913532da62db59, type: 3}
+  m_PrefabInstance: {fileID: 5890684105029059354}
+  m_PrefabAsset: {fileID: 0}

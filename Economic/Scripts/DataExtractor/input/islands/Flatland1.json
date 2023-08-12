@@ -1,9 +1,8 @@
 ﻿{
   "Id": "Flatland1",
   "Number": 1,
-  "MobsIds": [
-    "Chicken"
-  ],
+  "ResId": "Flatland",
+  "MobsIds": ["Chicken"],
   "CountMobsToComplete": 10,
   "MobsHealth": 10,
   "MobsCoinsReward": 4

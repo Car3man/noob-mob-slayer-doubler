@@ -68,6 +68,7 @@ namespace Game.Mobs
         
         private void DespawnMob()
         {
+            CurrentMob.mobHitEffect.CancelEffectIfThereIs();
             Object.Destroy(CurrentMob.gameObject);
             CurrentMob = null;
         } 

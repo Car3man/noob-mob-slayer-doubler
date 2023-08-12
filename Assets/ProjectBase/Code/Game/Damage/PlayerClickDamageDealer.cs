@@ -41,7 +41,7 @@ namespace Game.Damage
         private void HandleDamageClick(PointerEventData eventData)
         {
             var clickDamage = _upgradeInventory.GetDamageByUpgradeType(UpgradeType.Click);
-            _mobDamageDealer.DealDamage(clickDamage);
+            _mobDamageDealer.DealDamage(clickDamage, true);
         }
     }
 }

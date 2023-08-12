@@ -24,7 +24,7 @@ namespace Game.Damage
             if (Time.time - _lastDamageTime >= 1f)
             {
                 var idleDamage = _upgradeInventory.GetDamageByUpgradeType(UpgradeType.Idle);
-                _mobDamageDealer.DealDamage(idleDamage);
+                _mobDamageDealer.DealDamage(idleDamage, false);
 
                 _lastDamageTime = Time.time;
             }

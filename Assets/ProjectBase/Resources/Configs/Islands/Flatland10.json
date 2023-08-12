@@ -4,7 +4,7 @@
   "ResId": "Flatland",
   "MobsIds": ["Chicken"],
   "CountMobsToComplete": 1,
-  "MobsHealth": 2000,
+  "MobsHealth": 1500,
   "MobsCoinsReward": 100,
   "IsTimeLimit": true,
   "TimeLimit": 30

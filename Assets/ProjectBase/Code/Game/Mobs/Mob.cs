@@ -6,6 +6,8 @@ namespace Game.Mobs
 {
     public class Mob : MonoBehaviour
     {
+        public MobHitEffect mobHitEffect;
+        
         private MobPrototype _prototype;
         private BigInteger _health;
         private BigInteger _maxHealth;
@@ -22,7 +24,7 @@ namespace Game.Mobs
         {
             _prototype = prototype;
         }
-
+        
         public void ChangeHealth(BigInteger healthDelta)
         {
             SetHealth(_health + healthDelta);

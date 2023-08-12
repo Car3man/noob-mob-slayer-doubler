@@ -2,7 +2,7 @@
   "Id": "Flatland1",
   "Number": 1,
   "ResId": "Flatland",
-  "MobsIds": ["Chicken"],
+  "MobsIds": ["Chicken", "Cow", "Sheep", "Pig", "Spider", "Wolf", "Zombie", "Skeleton", "Creeper"],
   "CountMobsToComplete": 10,
   "MobsHealth": 10,
   "MobsCoinsReward": 4
