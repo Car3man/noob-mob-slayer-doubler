@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -7,6 +8,7 @@ namespace Game.Currency
     public class CoinHarvester : ITickable, IFixedTickable
     {
         private readonly Camera _camera;
+        private readonly IAudioManager _audioManager;
         private readonly CoinSpawner _coinSpawner;
         private readonly CurrencyController _currencyController;
         private readonly RaycastHit[] _hits = new RaycastHit[3];
@@ -16,11 +18,13 @@ namespace Game.Currency
 
         public CoinHarvester(
             Camera camera,
+            IAudioManager audioManager,
             CoinSpawner coinSpawner,
             CurrencyController currencyController
             )
         {
             _camera = camera;
+            _audioManager = audioManager;
             _coinSpawner = coinSpawner;
             _currencyController = currencyController;
         }
@@ -68,11 +72,12 @@ namespace Game.Currency
             }
         }
 
-        private void CollectCoin(Coin coin)
+        public void CollectCoin(Coin coin)
         {
             coin.MarkWasTook();
             _currencyController.AddCoins(coin.Value);
             _coinSpawner.Despawn(coin);
+            _audioManager.PlaySound("Coin", volume: 0.33f);
         }
     }
 }

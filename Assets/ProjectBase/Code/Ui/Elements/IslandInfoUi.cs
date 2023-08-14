@@ -121,36 +121,14 @@ namespace Ui.Elements
         
         private void OnButtonChangeIslandLeftClick()
         {
-            var minIslandNumber = _configProvider
-                .GetIslands()
-                .OrderBy(x => x.Number)
-                .First()
-                .Number;
-            var currentIsland = _islandChanger.CurrentIsland;
-            var currentIslandPrototype = currentIsland.Prototype;
-            if (currentIslandPrototype.Number == minIslandNumber)
-            {
-                return;
-            }
-            
-            _islandChanger.ChangeAndSaveIsland(currentIslandPrototype.Number - 1);
+            var currIslandNumber = _islandChanger.CurrentIsland.Prototype.Number;
+            _islandChanger.ChangeAndSaveIsland(currIslandNumber - 1);
         }
 
         private void OnButtonChangeIslandRightClick()
         {
-            var maxIslandNumber = _configProvider
-                .GetIslands()
-                .OrderBy(x => x.Number)
-                .Last()
-                .Number;
-            var currentIsland = _islandChanger.CurrentIsland;
-            var currentIslandPrototype = currentIsland.Prototype;
-            if (currentIslandPrototype.Number == maxIslandNumber)
-            {
-                return;
-            }
-            
-            _islandChanger.ChangeAndSaveIsland(currentIslandPrototype.Number + 1);
+            var currIslandNumber = _islandChanger.CurrentIsland.Prototype.Number;
+            _islandChanger.ChangeAndSaveIsland(currIslandNumber + 1);
         }
     }
 }

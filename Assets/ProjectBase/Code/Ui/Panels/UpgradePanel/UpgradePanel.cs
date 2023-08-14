@@ -11,25 +11,27 @@ namespace Ui.Panels
         [SerializeField] private RectTransform panelRectTransform;
         [SerializeField] private Button toggleOpenedButton;
         [SerializeField] private Button toggleClosedButton;
-        [SerializeField] private UpgradeItem upgradeItemTemplate;
         [SerializeField] private Transform upgradeItemsParent;
-        
+
+        private UpgradeItem.Factory _itemFactory;
         private UpgradeInventory _upgradeInventory;
         private readonly Dictionary<int, UpgradeItem> _upgradeItems = new();
 
-        public bool IsOpened { get; private set; }
+        public bool IsOpened { get; private set; } = true;
 
         [Zenject.Inject]
-        public void Construct(UpgradeInventory upgradeInventory)
+        public void Construct(
+            UpgradeItem.Factory itemFactory,
+            UpgradeInventory upgradeInventory
+            )
         {
+            _itemFactory = itemFactory;
             _upgradeInventory = upgradeInventory;
         }
 
         public void OnGameStart()
         {
-            upgradeItemTemplate.gameObject.SetActive(false);
-            
-            _upgradeInventory.OnBuyUpgrade += OnBuyUpgrade;
+            _upgradeInventory.OnUpgradeLevelChange += OnUpgradeLevelChange;
             
             toggleOpenedButton.onClick.AddListener(ToggleShowState);
             toggleClosedButton.onClick.AddListener(ToggleShowState);
@@ -40,7 +42,7 @@ namespace Ui.Panels
 
         private void OnDestroy()
         {
-            _upgradeInventory.OnBuyUpgrade -= OnBuyUpgrade;
+            _upgradeInventory.OnUpgradeLevelChange -= OnUpgradeLevelChange;
             toggleOpenedButton.onClick.RemoveListener(ToggleShowState);
             toggleClosedButton.onClick.RemoveListener(ToggleShowState);
         }
@@ -66,7 +68,8 @@ namespace Ui.Panels
 
         private UpgradeItem CreateUpgradeItem()
         {
-            var upgradeItem = Instantiate(upgradeItemTemplate, upgradeItemsParent);
+            var upgradeItem = _itemFactory.Create();
+            upgradeItem.transform.SetParent(upgradeItemsParent);
             return upgradeItem;
         }
 
@@ -74,7 +77,7 @@ namespace Ui.Panels
         {
             foreach (var upgradeItem in _upgradeItems.Values)
             {
-                var isAvailableToBuy = _upgradeInventory.IsUpgradeAvailableToBuy(upgradeItem.Upgrade.Prototype.Id);
+                var isAvailableToBuy = _upgradeInventory.IsUpgradeUnlocked(upgradeItem.Upgrade.Prototype.Id);
                 upgradeItem.gameObject.SetActive(isAvailableToBuy);
             }
         }
@@ -82,11 +85,11 @@ namespace Ui.Panels
         private void OnUpgradeButtonClick(Upgrade upgrade)
         {
             _upgradeInventory.BuyUpgrade(upgrade.Prototype.Id);
-            UpdateUpgradeItemsActiveState();
         }
 
-        private void OnBuyUpgrade(int upgradeId)
+        private void OnUpgradeLevelChange(int upgradeId)
         {
+            UpdateUpgradeItemsActiveState();
             _upgradeItems[upgradeId].NotifyAboutUpgradeLevelChange();
         }
 

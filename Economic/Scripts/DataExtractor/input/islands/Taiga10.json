@@ -1,0 +1,11 @@
+﻿{
+  "Id": "Taiga10",
+  "Number": 40,
+  "ResId": "Taiga",
+  "MobsIds": ["Chicken"],
+  "CountMobsToComplete": 1,
+  "MobsHealth": 3000000,
+  "MobsCoinsReward": 20000,
+  "IsTimeLimit": true,
+  "TimeLimit": 30
+}

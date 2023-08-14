@@ -29,6 +29,18 @@ namespace Game.Islands
             mobDeathHandler.OnMobDeath += OnMobDeath;
         }
 
+        public void ForceUnlock(int islandNumber)
+        {
+            var (currProgress, progressToReach) = GetProgressByIslandNumber(islandNumber);
+            _gameSaves.SaveIslandKilledMobs(islandNumber, progressToReach);
+            
+            OnIslandCompleteProgress?.Invoke(islandNumber, progressToReach, progressToReach);
+            if (currProgress < progressToReach)
+            {
+                OnIslandComplete?.Invoke(islandNumber);
+            }
+        }
+        
         public bool IsUnlockedOrCompleted(int islandNumber) =>
             IsUnlocked(islandNumber) || IsCompleted(islandNumber);
 
@@ -59,7 +71,6 @@ namespace Game.Islands
             _gameSaves.SaveIslandKilledMobs(currentIslandPrototype.Number, newKilledMobs);
             
             OnIslandCompleteProgress?.Invoke(currentIslandPrototype.Number, newKilledMobs, currentIslandPrototype.CountMobsToComplete);
-
             if (prevKilledMobs < killedMobsTarget && newKilledMobs >= killedMobsTarget)
             {
                 OnIslandComplete?.Invoke(currentIslandPrototype.Number);

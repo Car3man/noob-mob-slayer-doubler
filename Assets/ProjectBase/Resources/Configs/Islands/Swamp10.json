@@ -2,10 +2,10 @@
   "Id": "Swamp10",
   "Number": 20,
   "ResId": "Swamp",
-  "MobsIds": ["Chicken"],
-  "CountMobsToComplete": 10,
-  "MobsHealth": 50000,
-  "MobsCoinsReward": 500,
+  "MobsIds": ["Slime"],
+  "CountMobsToComplete": 1,
+  "MobsHealth": 68600,
+  "MobsCoinsReward": 5000,
   "IsTimeLimit": true,
   "TimeLimit": 30
 }

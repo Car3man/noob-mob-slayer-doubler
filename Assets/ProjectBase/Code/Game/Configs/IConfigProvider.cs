@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Game.Enchantments;
 using Game.Islands;
 using Game.Mobs;
 using Game.Upgrades;
@@ -16,5 +17,7 @@ namespace Game.Configs
         IslandPrototype GetIslandByNumber(int number);
         IEnumerable<UpgradePrototype> GetUpgrades();
         UpgradePrototype GetUpgradeById(int id);
+        IEnumerable<EnchantmentPrototype> GetEnchantments();
+        EnchantmentPrototype GetEnchantmentById(string id);
     }
 }

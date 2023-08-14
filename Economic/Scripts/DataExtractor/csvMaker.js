@@ -1,6 +1,6 @@
 import { write } from "files";
 
-export async function makeCsv (jsonRecords, outputPath) {
+export async function makeCsv (jsonRecords, outputPath, sortPredicate) {
   let content = "";
 
   if (!jsonRecords || jsonRecords.length === 0) {
@@ -22,12 +22,18 @@ export async function makeCsv (jsonRecords, outputPath) {
       content += "\n\r";
     }
   }
-  const sortedJsonRecords = jsonRecords.sort((a, b) => a.Number - b.Number);
+  const sortedJsonRecords = sortPredicate(jsonRecords);
   for (let i = 0; i < sortedJsonRecords.length; i++) {
     const record = sortedJsonRecords[i];
     for (let j = 0; j < headRecordKeys.length; j++) {
       const recordProperty = record[headRecordKeys[j]];
-      content += (recordProperty ? recordProperty : "") + ",";
+      let recordPropertyString;
+      switch (typeof recordProperty) {
+        case "object": recordPropertyString = "\"" + JSON.stringify(recordProperty).replaceAll("\"", "'") + "\""; break;
+        case "undefined": recordPropertyString = ""; break;
+        default: recordPropertyString = recordProperty; break;
+      }
+      content += recordPropertyString + ",";
       if (j === headRecordKeys.length - 1) {
         content += "\n\r";
       }

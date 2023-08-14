@@ -2,10 +2,10 @@
   "Id": "Flatland10",
   "Number": 10,
   "ResId": "Flatland",
-  "MobsIds": ["Chicken"],
+  "MobsIds": ["Zombie"],
   "CountMobsToComplete": 1,
-  "MobsHealth": 1500,
-  "MobsCoinsReward": 100,
+  "MobsHealth": 5000,
+  "MobsCoinsReward": 350,
   "IsTimeLimit": true,
   "TimeLimit": 30
 }

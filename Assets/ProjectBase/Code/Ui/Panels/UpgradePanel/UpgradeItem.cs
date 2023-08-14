@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Ui.Panels
 {
@@ -12,11 +13,19 @@ namespace Ui.Panels
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI damageText;
         [SerializeField] private UpgradeButton upgradeButton;
+        
+        private UpgradeInventory _upgradeInventory;
 
         public Upgrade Upgrade { get; private set; }
         
         public delegate void UpgradeButtonClickDelegate(Upgrade upgrade);
         public event UpgradeButtonClickDelegate OnUpgradeButtonClick;
+
+        [Zenject.Inject]
+        public void Construct(UpgradeInventory upgradeInventory)
+        {
+            _upgradeInventory = upgradeInventory;
+        }
         
         private void OnEnable()
         {
@@ -43,13 +52,18 @@ namespace Ui.Panels
         {
             titleText.text = $"Upgrade - {Upgrade.Prototype.Id}";
             levelText.text = $"Lvl.{Upgrade.Level}";
-            damageText.text = Upgrade.GetDamage().ToString();
+            damageText.text = _upgradeInventory.GetDamageByUpgradeId(Upgrade.Prototype.Id).ToString();
             upgradeButton.SetUpgradeInfo(Upgrade, 1);
         }
         
         private void OnButtonUpgradeClick()
         {
             OnUpgradeButtonClick?.Invoke(Upgrade);
+        }
+        
+        public class Factory : PlaceholderFactory<UpgradeItem>
+        {
+            
         }
     }
 }

@@ -124,7 +124,7 @@ namespace ServicesImpls.Audio
             }
         }
 
-        public async void PlayMusicIfNotSame(string name, float volume)
+        public async void PlayMusicIfNotSame(string name, float volume = 1f)
         {
             if (_musicEmitters.Count > 0)
             {
@@ -138,7 +138,7 @@ namespace ServicesImpls.Audio
             PlayMusic(name, volume);
         }
 
-        public async void PlayMusic(string name, float volume)
+        public async void PlayMusic(string name, float volume = 1f)
         {
             for (int i = 0; i < _musicEmitters.Count; i++)
             {
@@ -155,7 +155,7 @@ namespace ServicesImpls.Audio
             _baseEmittersVolume.Add(instance, volume);
         }
 
-        public async void PlaySound(string name, bool loop, float volume, float pitch)
+        public async void PlaySound(string name, bool loop, float volume = 1f, float pitch = 1f)
         {
             AudioEmitter instance = _emittersPool.Spawn();
             instance.Clip = await _clipProvider.Get(name, "Sounds");

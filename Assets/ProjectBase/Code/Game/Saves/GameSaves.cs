@@ -17,6 +17,7 @@ namespace Game.Saves
         private const string UpgradeLevelKey = "upgrade_level_{0}";
         private const string SelectedIslandIdKey = "selected_island_id";
         private const string IslandKilledMobsKey = "island_{0}_killed_mobs";
+        private const string EnchantmentStatusKey = "enchantment_{0}";
 
         public GameSaves(
             ISavingManager savingManager,
@@ -39,6 +40,10 @@ namespace Game.Saves
             foreach (var islandPrototype in _configProvider.GetIslands())
             {
                 await LoadIslandKilledMobs(islandPrototype.Number);
+            }
+            foreach (var enchantmentPrototype in _configProvider.GetEnchantments())
+            {
+                await LoadEnchantmentStatus(enchantmentPrototype.Id);
             }
         }
         
@@ -73,6 +78,15 @@ namespace Game.Saves
             await SaveVariable<int>(FormatIslandKilledMobsKey(islandNumber), islandKilledMobs, immediatelySave);
         private string FormatIslandKilledMobsKey(int islandNumber) =>
             string.Format(IslandKilledMobsKey, islandNumber);
+        
+        public bool IsEnchantmentActive(string enchantmentId, bool defaultValue) =>
+            GetVariable(FormatEnchantmentStatusKey(enchantmentId), defaultValue);
+        private async Task LoadEnchantmentStatus(string enchantmentId) =>
+            await LoadVariable<bool>(FormatEnchantmentStatusKey(enchantmentId));
+        public async void SaveEnchantmentStatus(string enchantmentId, bool isActive, bool immediatelySave = true) =>
+            await SaveVariable<bool>(FormatEnchantmentStatusKey(enchantmentId), isActive, immediatelySave);
+        private string FormatEnchantmentStatusKey(string enchantmentId) =>
+            string.Format(EnchantmentStatusKey, enchantmentId);
 
         private T GetVariable<T>(string key, T defaultValue)
         {

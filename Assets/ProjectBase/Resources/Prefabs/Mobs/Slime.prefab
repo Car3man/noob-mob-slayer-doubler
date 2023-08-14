@@ -148,12 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers:
-  - {fileID: 7748186655822978208}
-  - {fileID: 4471758509800790308}
-  - {fileID: 1777082908431117169}
   - {fileID: 7039922180672277482}
-  - {fileID: 1281140879888193853}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 0.69803923}
   hitColor: {r: 0.9, g: 0.17999998, b: 0.17999998, a: 1}
 --- !u!1 &6263118827176196867
 GameObject:

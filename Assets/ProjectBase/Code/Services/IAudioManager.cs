@@ -12,9 +12,9 @@
         event SoundMuteChangeDelegate OnSoundMuteChange;
         event MusicVolumeChangeDelegate OnMusicVolumeChange;
         event SoundVolumeChangeDelegate OnSoundVolumeChange;
-        void PlayMusicIfNotSame(string name, float volume);
+        void PlayMusicIfNotSame(string name, float volume = 1f);
         void PlayMusic(string name, float volume);
-        void PlaySound(string name, bool loop, float volume, float pitch);
+        void PlaySound(string name, bool loop = false, float volume = 1f, float pitch = 1f);
         void StopMusic();
         void StopSound(string name);
     }

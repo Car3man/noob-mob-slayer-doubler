@@ -10,7 +10,7 @@ namespace Utility
             return value < min ? min : value > max ? max : value;
         }
 
-        public static float RationalDivision(BigInteger a, BigInteger b)
+        public static float RationalDivisionAsFloat(BigInteger a, BigInteger b)
         {
             return (float)new BigRational(a, b);
         }

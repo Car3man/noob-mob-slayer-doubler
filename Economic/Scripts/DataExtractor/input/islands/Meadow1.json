@@ -1,0 +1,9 @@
+﻿{
+  "Id": "Meadow1",
+  "Number": 21,
+  "ResId": "Meadow",
+  "MobsIds": ["Chicken", "Cow", "Sheep", "Pig", "Spider", "Wolf", "Zombie", "Skeleton", "Creeper"],
+  "CountMobsToComplete": 10,
+  "MobsHealth": 3000,
+  "MobsCoinsReward": 144
+}

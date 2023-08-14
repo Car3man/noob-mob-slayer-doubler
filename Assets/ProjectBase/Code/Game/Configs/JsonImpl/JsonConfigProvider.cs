@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using Game.Enchantments;
 using Game.Islands;
 using Game.Mobs;
 using Game.Upgrades;
@@ -19,11 +20,14 @@ namespace Game.Configs.JsonImpl
         private readonly Dictionary<string, IslandPrototype> _islandPrototypes = new();
         private readonly Dictionary<int, UpgradeJsonObject> _upgradeJsonObjects = new();
         private readonly Dictionary<int, UpgradePrototype> _upgradePrototypes = new();
+        private readonly Dictionary<string, EnchantmentJsonObject> _enchantmentJsonObjects = new();
+        private readonly Dictionary<string, EnchantmentPrototype> _enchantmentPrototypes = new();
         private bool _configsLoaded;
         
         private const string MobsConfigsPath = "Configs/Mobs/";
         private const string IslandsConfigsPath = "Configs/Islands/";
         private const string UpgradesConfigsPath = "Configs/Upgrades/";
+        private const string EnchantmentsConfigsPath = "Configs/Enchantments/";
 
         public async Task LoadAllAsync()
         {
@@ -32,6 +36,7 @@ namespace Game.Configs.JsonImpl
             LoadMobs();
             LoadIslands();
             LoadUpgrades();
+            LoadEnchantments();
             
             _configsLoaded = true;
 
@@ -140,25 +145,44 @@ namespace Game.Configs.JsonImpl
                 _upgradePrototypes.Add(upgradeId, upgradePrototype);
             }
         }
+        
+        private void LoadEnchantments()
+        {
+            var enchantmentConfigs = LoadConfigFiles(EnchantmentsConfigsPath);
+
+            foreach (var enchantmentConfig in enchantmentConfigs)
+            {
+                var enchantmentJsonObject = JsonConvert.DeserializeObject<EnchantmentJsonObject>(enchantmentConfig.Text);
+                _enchantmentJsonObjects.Add(enchantmentJsonObject.Id, enchantmentJsonObject);
+            }
+            
+            foreach (var enchantmentId in _enchantmentJsonObjects.Keys)
+            {
+                var enchantmentJsonObject = _enchantmentJsonObjects[enchantmentId];
+                var upgradePrototype = new EnchantmentPrototype(
+                    enchantmentId,
+                    enchantmentJsonObject.UpgradeId,
+                    enchantmentJsonObject.DamageMultiplier
+                );
+                _enchantmentPrototypes.Add(enchantmentId, upgradePrototype);
+            }
+        }
 
         public IEnumerable<MobPrototype> GetMobs()
         {
             ThrowIfConfigsNotLoaded();
-            
             return _mobPrototypes.Select(x => x.Value).AsEnumerable();
         }
 
         public MobPrototype GetMobById(string id)
         {
             ThrowIfConfigsNotLoaded();
-
             return _mobPrototypes[id];
         }
         
         public IEnumerable<IslandPrototype> GetIslands()
         {
             ThrowIfConfigsNotLoaded();
-            
             return _islandPrototypes
                 .Select(x => x.Value)
                 .OrderBy(x => x.Number)
@@ -168,29 +192,37 @@ namespace Game.Configs.JsonImpl
         public IslandPrototype GetIslandById(string id)
         {
             ThrowIfConfigsNotLoaded();
-
             return _islandPrototypes[id];
         }
 
         public IslandPrototype GetIslandByNumber(int number)
         {
             ThrowIfConfigsNotLoaded();
-
             return GetIslands().First(island => island.Number == number);
         }
 
         public IEnumerable<UpgradePrototype> GetUpgrades()
         {
             ThrowIfConfigsNotLoaded();
-            
             return _upgradePrototypes.Select(x => x.Value).AsEnumerable();
         }
 
         public UpgradePrototype GetUpgradeById(int id)
         {
             ThrowIfConfigsNotLoaded();
-
             return _upgradePrototypes[id];
+        }
+        
+        public IEnumerable<EnchantmentPrototype> GetEnchantments()
+        {
+            ThrowIfConfigsNotLoaded();
+            return _enchantmentPrototypes.Select(x => x.Value).AsEnumerable();
+        }
+        
+        public EnchantmentPrototype GetEnchantmentById(string id)
+        {
+            ThrowIfConfigsNotLoaded();
+            return _enchantmentPrototypes[id];
         }
 
         private void ThrowIfConfigsNotLoaded()

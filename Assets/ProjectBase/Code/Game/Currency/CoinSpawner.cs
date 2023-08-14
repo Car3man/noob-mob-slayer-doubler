@@ -41,7 +41,9 @@ namespace Game.Currency
 
         private void SpawnFromMobDeath(Mob mob)
         {
-            const int countParts = 5;
+            const int minCountParts = 3;
+            const int maxCountParts = 9;
+            var countParts = Random.Range(minCountParts, maxCountParts + 1);
             
             var sumCoinReward = GetSumOfCoinsRewardForMob(mob);
             if (sumCoinReward <= 0)
@@ -53,9 +55,15 @@ namespace Game.Currency
             for (int i = 0; i < countParts; i++)
             {
                 var coinReward = partCoinReward;
+                
                 if (i == countParts - 1)
                 {
                     coinReward += sumCoinReward - partCoinReward * countParts;
+                }
+                
+                if (coinReward <= 0)
+                {
+                    continue;
                 }
 
                 var coinInstance = Spawn(coinReward);
@@ -71,7 +79,7 @@ namespace Game.Currency
             
             var dropCurveStartPoint = mob.transform.position;
             var dropCurveDestinationPoint = GetNextCoinDropDestinationPoint(mob);
-            var dropCurveControlPoint = dropCurveDestinationPoint + Vector3.up;
+            var dropCurveControlPoint = dropCurveDestinationPoint + Vector3.up * 2f;
 
             float timeDown = dropOutDuration;
             while (timeDown > 0f)
@@ -95,7 +103,7 @@ namespace Game.Currency
             var randomDirectionPivot = new Vector3(1f, 0f, -1f);
             var randomDirection =
                 MathHelper.RotateVectorAboutPoint(randomDirectionPivot, Vector3.zero, Vector3.up, randomAngleRadians);
-            var randomLength = Random.Range(0.45f, 1.25f);
+            var randomLength = Random.Range(0.45f, 1.35f);
             var randomPos = mob.transform.position + randomDirection.normalized * randomLength;
             return randomPos;
         }

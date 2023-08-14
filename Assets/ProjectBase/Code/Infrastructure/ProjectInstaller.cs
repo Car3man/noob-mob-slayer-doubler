@@ -2,6 +2,7 @@
 using Game.Configs.JsonImpl;
 using Game.Saves;
 using Services;
+using ServicesImpls.Audio;
 using ServicesImpls.PrefsSaving;
 using Zenject;
 
@@ -13,6 +14,7 @@ namespace Infrastructure
         {
             BindConfigProvider();
 
+            BindAudioManager();
             BindSavingManager();
             BindGameSaves();
 
@@ -24,6 +26,23 @@ namespace Infrastructure
             Container
                 .Bind<IConfigProvider>()
                 .To<JsonConfigProvider>()
+                .AsSingle();
+        }
+
+        private void BindAudioManager()
+        {
+            Container
+                .Bind<AudioClipProvider>()
+                .FromNew()
+                .AsSingle();
+            
+            Container.BindMemoryPool<AudioEmitter, AudioEmitterPool>()
+                .FromComponentInNewPrefabResource("Prefabs/AudioEmitter");
+            
+            Container
+                .Bind(typeof(IAudioManager), typeof(ITickable))
+                .To<AudioManager>()
+                .FromNew()
                 .AsSingle();
         }
 

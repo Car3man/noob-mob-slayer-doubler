@@ -22,7 +22,7 @@ namespace Game.Upgrades
 
         public BigInteger GetUpgradePrice()
         {
-            float multiplier = Mathf.Pow(_prototype.BasePriceMultiplier, Level + 1);
+            float multiplier = Mathf.Pow(_prototype.BasePriceMultiplier, Level);
             BigInteger bigMultiplier = (BigInteger)(multiplier * 100f);
             return _prototype.BaseBasePrice * bigMultiplier / 100;
         }

@@ -3,13 +3,13 @@ using Game.Mobs;
 
 namespace Game.Damage
 {
-    public class MobDamageDealer
+    public class DamageDealer
     {
         private readonly MobSpawner _mobSpawner;
 
         private const float HitEffectDuration = 0.1f;
 
-        public MobDamageDealer(MobSpawner mobSpawner)
+        public DamageDealer(MobSpawner mobSpawner)
         {
             _mobSpawner = mobSpawner;
         }

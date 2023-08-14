@@ -1,0 +1,11 @@
+﻿{
+  "Id": "Meadow10",
+  "Number": 30,
+  "ResId": "Meadow",
+  "MobsIds": ["Chicken"],
+  "CountMobsToComplete": 1,
+  "MobsHealth": 160000,
+  "MobsCoinsReward": 10000,
+  "IsTimeLimit": true,
+  "TimeLimit": 30
+}

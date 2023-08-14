@@ -57,7 +57,7 @@ namespace Ui.Elements
         private void UpdateMobHealthBar(Mob mob)
         {
             healthText.text = FormatMobHealth(mob);
-            healthBar.SetValue(BigIntegerX.RationalDivision(mob.Health, mob.MaxHealth));
+            healthBar.SetValue(BigIntegerX.RationalDivisionAsFloat(mob.Health, mob.MaxHealth));
         }
 
         private string FormatMobHealth(Mob mob)

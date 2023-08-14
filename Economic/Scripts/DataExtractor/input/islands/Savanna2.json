@@ -1,0 +1,7 @@
+﻿{
+  "ParentId": "Savanna1",
+  "Id": "Savanna2",
+  "Number": 42,
+  "MobsHealth": 500000,
+  "MobsCoinsReward": 3500
+}

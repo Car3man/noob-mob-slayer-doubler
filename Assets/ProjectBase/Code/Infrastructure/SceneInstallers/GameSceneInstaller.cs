@@ -1,9 +1,13 @@
-﻿using Game.Currency;
+﻿using Game.Cheats;
+using Game.Currency;
 using Game.Damage;
+using Game.Enchantments;
 using Game.Islands;
 using Game.Mobs;
 using Game.Upgrades;
+using Infrastructure.SceneStarters;
 using Ui;
+using Ui.Panels;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
@@ -26,7 +30,7 @@ namespace Infrastructure.SceneInstallers
             BindIslandCompletionSystem();
             BindIslandLimitTimer();
 
-            BindMobDamageDealer();
+            BindDamageDealer();
             BindPlayerClickDamageHandler();
             BindPlayerIdleDamageDealer();
 
@@ -34,10 +38,16 @@ namespace Infrastructure.SceneInstallers
             BindCoinPool();
             BindCoinSpawner();
             BindCoinHarvester();
-            
-            BindUpgradeController();
 
+            BindEnchantmentInventory();
+            BindUpgradeInventory();
+            
             BindGameSceneUiStarter();
+            BindUiItemsFactories();
+            
+            BindGameSceneStarter();
+
+            BindCheats();
         }
 
         private void BindGameSceneCamera()
@@ -126,10 +136,10 @@ namespace Infrastructure.SceneInstallers
                 .NonLazy();
         }
 
-        private void BindMobDamageDealer()
+        private void BindDamageDealer()
         {
             Container
-                .Bind<MobDamageDealer>()
+                .Bind<DamageDealer>()
                 .FromNew()
                 .AsSingle();
         }
@@ -185,7 +195,15 @@ namespace Infrastructure.SceneInstallers
                 .AsSingle();
         }
 
-        private void BindUpgradeController()
+        private void BindEnchantmentInventory()
+        {
+            Container
+                .Bind<EnchantmentInventory>()
+                .FromNew()
+                .AsSingle();
+        }
+
+        private void BindUpgradeInventory()
         {
             Container
                 .Bind<UpgradeInventory>()
@@ -202,6 +220,34 @@ namespace Infrastructure.SceneInstallers
                 .Bind<GameSceneUiStarter>()
                 .FromInstance(gameSceneUiStarter)
                 .AsSingle();
+        }
+
+        private void BindUiItemsFactories()
+        {
+            Container
+                .BindFactory<UpgradeItem, UpgradeItem.Factory>()
+                .FromComponentInNewPrefabResource("Prefabs/Ui/Items/UpgradeItem");
+        }
+
+        private void BindGameSceneStarter()
+        {
+            var gameSceneStarter = FindObjectOfType<GameSceneStarter>();
+            Assert.IsNotNull(gameSceneStarter);
+            
+            Container
+                .Bind<GameSceneStarter>()
+                .FromInstance(gameSceneStarter)
+                .AsSingle();
+        }
+
+        private void BindCheats()
+        {
+            Container
+                .Bind(typeof(CheatsController), typeof(ITickable))
+                .To<CheatsController>()
+                .FromNew()
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

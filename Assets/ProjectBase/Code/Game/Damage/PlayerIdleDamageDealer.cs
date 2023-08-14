@@ -6,25 +6,27 @@ namespace Game.Damage
 {
     public class PlayerIdleDamageDealer : ITickable
     {
-        private readonly MobDamageDealer _mobDamageDealer;
+        private readonly DamageDealer _damageDealer;
         private readonly UpgradeInventory _upgradeInventory;
         private float _lastDamageTime;
 
         public PlayerIdleDamageDealer(
-            MobDamageDealer mobDamageDealer,
+            DamageDealer damageDealer,
             UpgradeInventory upgradeInventory
             )
         {
-            _mobDamageDealer = mobDamageDealer;
+            _damageDealer = damageDealer;
             _upgradeInventory = upgradeInventory;
         }
         
         public void Tick()
         {
-            if (Time.time - _lastDamageTime >= 1f)
+            const float dealDamageEvery = 1f / 5f;
+            
+            if (Time.time - _lastDamageTime >= dealDamageEvery)
             {
                 var idleDamage = _upgradeInventory.GetDamageByUpgradeType(UpgradeType.Idle);
-                _mobDamageDealer.DealDamage(idleDamage, false);
+                _damageDealer.DealDamage(idleDamage / 5, false);
 
                 _lastDamageTime = Time.time;
             }

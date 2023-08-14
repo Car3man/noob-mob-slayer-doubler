@@ -1,0 +1,9 @@
+﻿{
+  "Id": "Savanna1",
+  "Number": 41,
+  "ResId": "Savanna",
+  "MobsIds": ["Chicken", "Cow", "Sheep", "Pig", "Spider", "Wolf", "Zombie", "Skeleton", "Creeper"],
+  "CountMobsToComplete": 10,
+  "MobsHealth": 400000,
+  "MobsCoinsReward": 3500
+}

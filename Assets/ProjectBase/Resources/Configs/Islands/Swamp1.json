@@ -2,8 +2,8 @@
   "Id": "Swamp1",
   "Number": 11,
   "ResId": "Swamp",
-  "MobsIds": ["Chicken", "Cow", "Sheep", "Pig", "Spider", "Wolf", "Zombie", "Skeleton", "Creeper"],
+  "MobsIds": ["Cow", "Sheep", "Spider", "Zombie", "Creeper"],
   "CountMobsToComplete": 10,
-  "MobsHealth": 500,
-  "MobsCoinsReward": 36
+  "MobsHealth": 592,
+  "MobsCoinsReward": 74
 }

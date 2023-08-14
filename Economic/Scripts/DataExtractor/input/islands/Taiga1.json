@@ -1,0 +1,9 @@
+﻿{
+  "Id": "Taiga1",
+  "Number": 31,
+  "ResId": "Taiga",
+  "MobsIds": ["Chicken", "Cow", "Sheep", "Pig", "Spider", "Wolf", "Zombie", "Skeleton", "Creeper"],
+  "CountMobsToComplete": 10,
+  "MobsHealth": 35000,
+  "MobsCoinsReward": 630
+}

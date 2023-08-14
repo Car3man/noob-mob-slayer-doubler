@@ -1,7 +1,11 @@
 ﻿{
-  "ParentId": "Flatland1",
   "Id": "Flatland5",
   "Number": 5,
-  "MobsHealth": 95,
-  "MobsCoinsReward": 6
+  "ResId": "Flatland",
+  "MobsIds": ["Zombie"],
+  "CountMobsToComplete": 1,
+  "MobsHealth": 1500,
+  "MobsCoinsReward": 125,
+  "IsTimeLimit": true,
+  "TimeLimit": 30
 }

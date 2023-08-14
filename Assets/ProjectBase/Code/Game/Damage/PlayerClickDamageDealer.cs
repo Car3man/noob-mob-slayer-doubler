@@ -10,16 +10,16 @@ namespace Game.Damage
     {
         [SerializeField] private ObjectInputHandler objectInputHandler;
         
-        private MobDamageDealer _mobDamageDealer;
+        private DamageDealer _damageDealer;
         private UpgradeInventory _upgradeInventory;
 
         [Zenject.Inject]
         public void Construct(
-            MobDamageDealer mobDamageDealer,
+            DamageDealer damageDealer,
             UpgradeInventory upgradeInventory
             )
         {
-            _mobDamageDealer = mobDamageDealer;
+            _damageDealer = damageDealer;
             _upgradeInventory = upgradeInventory;
         }
 
@@ -41,7 +41,7 @@ namespace Game.Damage
         private void HandleDamageClick(PointerEventData eventData)
         {
             var clickDamage = _upgradeInventory.GetDamageByUpgradeType(UpgradeType.Click);
-            _mobDamageDealer.DealDamage(clickDamage, true);
+            _damageDealer.DealDamage(clickDamage, true);
         }
     }
 }
